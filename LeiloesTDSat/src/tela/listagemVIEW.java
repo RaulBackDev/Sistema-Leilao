@@ -1,3 +1,7 @@
+package tela;
+
+import banco.ProdutosDAO;
+import dados.ProdutosDTO;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 

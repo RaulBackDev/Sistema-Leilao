@@ -1,3 +1,9 @@
+package tela;
+
+
+import banco.ProdutosDAO;
+import dados.ProdutosDTO;
+
 
 public class cadastroVIEW extends javax.swing.JFrame {
 
