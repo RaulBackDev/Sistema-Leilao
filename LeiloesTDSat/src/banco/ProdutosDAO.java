@@ -2,13 +2,14 @@ package banco;
 
 import dados.ProdutosDTO;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProdutosDAO {
     ConectaDAO banco = new ConectaDAO();
     String scriptSQL;
-    ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public boolean cadastrarProduto (ProdutosDTO produto) {
         
@@ -32,9 +33,33 @@ public class ProdutosDAO {
         return true;
     }
     
-    public ArrayList<ProdutosDTO> listarProdutos() {
-        return listagem;
+    public List<ProdutosDTO> listarProdutos() {
+        List<ProdutosDTO> lista = new ArrayList();
+        
+        try {
+            scriptSQL = "SELECT * FROM produtos;";
+            PreparedStatement comandoSQL = banco.conectar().prepareStatement(scriptSQL);
+            ResultSet query = comandoSQL.executeQuery();
+            
+            while(query.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(query.getInt("id"));
+                produto.setNome(query.getString("nome"));
+                produto.setValor(query.getFloat("valor"));
+                produto.setStatus(query.getString("status")); 
+                
+                lista.add(produto);
+            }
+          
+        }catch(SQLException e) {
+            //System.out.println("Falha SELECT.\nErro: "+ e.getMessage());// DEBUG
+            banco.desconectar();
+            return null;
+        }   
+        
+        //System.out.println("Sucesso SELECT.");// Debug
+        banco.desconectar();
+        return lista;
     }
-      
 }
 
