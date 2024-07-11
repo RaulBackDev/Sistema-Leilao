@@ -120,7 +120,14 @@ public class CadastroVIEW extends javax.swing.JFrame {
     private void btCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCadastrarActionPerformed
         if(verificarPreenchimentoCampos() && verificarExceptionValor()) {
             ProdutosDTO produto = gerarProduto();
-            new ProdutosDAO().cadastrarProduto(produto);  
+            boolean res = new ProdutosDAO().cadastrarProduto(produto); 
+            
+            if(res) {
+                JOptionPane.showMessageDialog(this, "O produto foi cadastrado.");
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Falha ao tentar cadastrar o produto.");
+            }
         }    
     }//GEN-LAST:event_btCadastrarActionPerformed
 
