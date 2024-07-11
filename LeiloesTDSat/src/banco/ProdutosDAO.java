@@ -1,31 +1,38 @@
 package banco;
 
-
 import dados.ProdutosDTO;
 import java.sql.PreparedStatement;
-import java.sql.Connection;
-import javax.swing.JOptionPane;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 public class ProdutosDAO {
-    
-    Connection conn;
-    PreparedStatement prep;
-    ResultSet resultset;
+    ConectaDAO banco = new ConectaDAO();
+    String scriptSQL;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
-    public void cadastrarProduto (ProdutosDTO produto){
+    public boolean cadastrarProduto (ProdutosDTO produto) {
         
+        try {
+            scriptSQL = "INSERT INTO produtos(nome, valor, status) "
+                      + "VALUES(?, ?, ?);";
+            PreparedStatement comandoSQL = banco.conectar().prepareStatement(scriptSQL);
+            
+            comandoSQL.setString(1, produto.getNome()); comandoSQL.setFloat(2, produto.getValor());
+            comandoSQL.setString(3, produto.getStatus());
+            comandoSQL.execute();
+            
+        }catch(SQLException e) {
+            //System.out.println("Falha INSERT.\nErro: "+ e.getMessage());// Debug
+            banco.desconectar();
+            return false;
+        }
         
-        //conn = new conectaDAO().connectDB();
-        
-        
+        //System.out.println("Sucesso INSERT.");// Debug
+        banco.desconectar();
+        return true;
     }
     
-    public ArrayList<ProdutosDTO> listarProdutos(){
-        
+    public ArrayList<ProdutosDTO> listarProdutos() {
         return listagem;
     }
       
