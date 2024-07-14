@@ -1,9 +1,17 @@
 package tela;
 
+import banco.ProdutosDAO;
+import dados.ProdutosDTO;
+import java.util.List;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 public class VendasVIEW extends javax.swing.JFrame {
 
     public VendasVIEW() {
         initComponents();
+        listarProdutos();
     }
 
     @SuppressWarnings("unchecked")
@@ -37,6 +45,11 @@ public class VendasVIEW extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+        leftRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        for (int i = 0; i < tbl.getColumnCount(); i++) {
+            tbl.getColumnModel().getColumn(i).setCellRenderer(leftRenderer);
+        }
         sPn.setViewportView(tbl);
 
         btVoltar.setFont(new java.awt.Font("Lucida Console", 0, 14)); // NOI18N
@@ -125,5 +138,23 @@ public class VendasVIEW extends javax.swing.JFrame {
     private javax.swing.JTable tbl;
     // End of variables declaration//GEN-END:variables
 
-    
+    private void listarProdutos(){
+        
+        try {    
+            DefaultTableModel model = (DefaultTableModel) tbl.getModel();
+            model.setNumRows(0);
+            
+            List<ProdutosDTO> listagem = new ProdutosDAO().listarProdutosVendidos();
+            
+            for(int i = 0; i < listagem.size(); i++){
+                model.addRow(new Object[]{
+                    listagem.get(i).getId(),
+                    listagem.get(i).getNome(),
+                    listagem.get(i).getValor(),
+                    listagem.get(i).getStatus()
+                });
+            }
+            
+        } catch (Exception e) {}
+    }
 }
