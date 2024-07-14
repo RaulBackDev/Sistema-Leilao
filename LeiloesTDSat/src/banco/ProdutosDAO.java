@@ -61,5 +61,24 @@ public class ProdutosDAO {
         banco.desconectar();
         return lista;
     }
+    
+    public boolean venderProduto(int id) {
+        
+        try {
+            scriptSQL = "UPDATE produtos SET status = 'Vendido' WHERE id = ?;";
+            PreparedStatement comandoSQL = banco.conectar().prepareStatement(scriptSQL);
+            
+            comandoSQL.setInt(1, id); 
+            comandoSQL.execute();
+            
+        }catch(SQLException e) {
+            //System.out.println("Falha UPDATE.\nErro: "+ e.getMessage());// Debug
+            return false;
+        }
+        
+        //System.out.println("Sucesso UPDATE.");// Debug
+        return true;
+    }
+    
 }
 

@@ -3,6 +3,7 @@ package tela;
 import banco.ProdutosDAO;
 import dados.ProdutosDTO;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class ListagemVIEW extends javax.swing.JFrame {
@@ -123,12 +124,15 @@ public class ListagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String id = id_produto_venda.getText();
-        
-        ProdutosDAO produtosdao = new ProdutosDAO();
-        
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+        if(!id_produto_venda.getText().isEmpty()) {
+            new ProdutosDAO().venderProduto(Integer.parseInt(id_produto_venda.getText()));
+            listarProdutos();
+            
+            JOptionPane.showMessageDialog(this, "Sucesso na venda.");
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "Informe o id para vender algum produto.");
+        }    
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -187,13 +191,12 @@ public class ListagemVIEW extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void listarProdutos(){
-        try {
-            ProdutosDAO produtosdao = new ProdutosDAO();
-            
+        
+        try {    
             DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
             model.setNumRows(0);
             
-            List<ProdutosDTO> listagem = produtosdao.listarProdutos();
+            List<ProdutosDTO> listagem = new ProdutosDAO().listarProdutos();
             
             for(int i = 0; i < listagem.size(); i++){
                 model.addRow(new Object[]{
